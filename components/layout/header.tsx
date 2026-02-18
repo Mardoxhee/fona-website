@@ -150,7 +150,7 @@ export function Header() {
                                             OFFRES D&apos;EMPLOI
                                         </Link>
                                         <Link
-                                            href="/opportunites/appels-offres"
+                                            href="/opportunites/appels"
                                             className="block cursor-pointer px-6 py-4 font-heading text-base font-semibold text-neutral-800 transition-colors hover:bg-neutral-50 hover:text-secondary-500"
                                             onClick={() => setIsOpportunitesOpen(false)}
                                         >

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Users, ArrowRight, UserCheck, Stethoscope, Gavel, Home as HomeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -180,13 +181,13 @@ export default function Home() {
                   et pour que justice soit rendue aux victimes et à leurs descendants.
                 </p>
                 <div className="mt-8">
-                  <Button
-                    variant="outline"
-                    className="cursor-pointer gap-2 rounded-md border-neutral-900 px-6 py-3 font-heading font-medium text-neutral-900 hover:border-primary-500 hover:bg-primary-500 hover:text-white"
+                  <Link
+                    href="/genocost"
+                    className="inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-900 px-6 py-3 font-heading text-sm font-medium text-neutral-900 transition-colors hover:border-primary-500 hover:bg-primary-500 hover:text-white"
                   >
                     En savoir plus
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -198,9 +199,18 @@ export default function Home() {
       <section className="bg-neutral-50 py-20 lg:py-28">
         <Container>
           <AnimateOnScroll animation="fade-in-up">
-            <h2 className="font-heading text-2xl font-bold uppercase tracking-wide text-neutral-900">
-              NOS Actualités
-            </h2>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="font-heading text-2xl font-bold uppercase tracking-wide text-neutral-900">
+                NOS Actualités
+              </h2>
+              <Link
+                href="/actualites"
+                className="inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-900 px-6 py-3 font-heading text-sm font-medium text-neutral-900 transition-colors hover:border-primary-500 hover:bg-primary-500 hover:text-white"
+              >
+                Toutes les actualités
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </AnimateOnScroll>
 
           <div className="mt-10">

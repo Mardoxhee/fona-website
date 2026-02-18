@@ -6,9 +6,9 @@ import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 export function PartnerCTA() {
     return (
         <section className="relative overflow-hidden">
-            <div className="grid lg:grid-cols-2">
+            <div className="grid lg:grid-cols-2 lg:items-stretch">
                 {/* Left - Content */}
-                <AnimateOnScroll animation="fade-in-left">
+                <AnimateOnScroll animation="fade-in-left" className="h-full">
                     <div className="flex h-full items-center bg-secondary-600 px-8 py-16 lg:px-16 lg:py-24">
                         <div className="max-w-lg">
                             <h2 className="font-heading text-3xl font-bold text-white sm:text-4xl">
@@ -30,8 +30,8 @@ export function PartnerCTA() {
                 </AnimateOnScroll>
 
                 {/* Right - Image */}
-                <AnimateOnScroll animation="fade-in-right">
-                    <div className="relative h-[300px] lg:h-auto lg:min-h-[400px]">
+                <AnimateOnScroll animation="fade-in-right" className="h-full">
+                    <div className="relative h-[300px] lg:h-full">
                         <Image
                             src="/identification.jpeg"
                             alt="Partenaires du FONAREV sur le terrain"
