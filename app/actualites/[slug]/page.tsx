@@ -11,13 +11,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 
-function toAbsoluteUrl(src: string) {
-    const trimmed = (src || "").trim();
-    if (!trimmed) return siteConfig.ogImage;
-    if (/^https?:\/\//i.test(trimmed)) return trimmed;
-    return new URL(trimmed.startsWith("/") ? trimmed : `/${trimmed}`, siteConfig.url).toString();
-}
-
 function buildDescription(article: Awaited<ReturnType<typeof getNewsArticleBySlugApi>>) {
     if (!article) return siteConfig.description;
 
@@ -46,8 +39,8 @@ export async function generateMetadata({
 
     const title = `${article.title} | ${siteConfig.name}`;
     const description = buildDescription(article);
-    const image = toAbsoluteUrl(article.coverImage || article.image || siteConfig.ogImage);
     const url = new URL(`/actualites/${article.slug}`, siteConfig.url).toString();
+    const image = new URL(`/actualites/${article.slug}/opengraph-image`, siteConfig.url).toString();
 
     return {
         title,

@@ -5,7 +5,7 @@ export const siteConfig: SiteConfig = {
     description:
         "Fonds National des Réparations des Victimes des Violences Sexuelles liées aux Conflits et des Victimes des Crimes contre la Paix et la Sécurité de l'Humanité en République Démocratique du Congo.",
     url: "https://fonarev.cd",
-    ogImage: "https://fonarev.cd/logo-fonarev.jpg",
+    ogImage: "https://fonarev.cd/opengraph-image",
     links: {
         twitter: "https://twitter.com/fonarev",
         linkedin: "https://linkedin.com/company/fonarev",
