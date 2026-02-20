@@ -9,8 +9,11 @@ import { InterventionMap } from "@/components/home/intervention-map";
 import { PartnerCTA } from "@/components/home/partner-cta";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import { HomeLatestNews } from "@/components/home/home-latest-news";
+import { getLastNewsApi } from "@/lib/news";
 
-export default function Home() {
+export default async function Home() {
+  const lastNewsItems = await getLastNewsApi(4);
+
   return (
     <>
       {/* Hero Section */}
@@ -180,7 +183,7 @@ export default function Home() {
             </div>
           </AnimateOnScroll>
 
-          <HomeLatestNews />
+          <HomeLatestNews items={lastNewsItems} />
         </Container>
       </section>
 

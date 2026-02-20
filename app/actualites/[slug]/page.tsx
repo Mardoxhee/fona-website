@@ -5,9 +5,80 @@ import { NewsArticleDetail } from "@/components/home/news-article-detail";
 import { NewsletterCta } from "@/components/home/newsletter-cta";
 import { NewsGridCard } from "@/components/home/news-grid-card";
 import { getMoreNewsArticlesApi, getNewsArticleBySlugApi } from "@/lib/news";
+import { siteConfig } from "@/config/site";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
+
+function toAbsoluteUrl(src: string) {
+    const trimmed = (src || "").trim();
+    if (!trimmed) return siteConfig.ogImage;
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return new URL(trimmed.startsWith("/") ? trimmed : `/${trimmed}`, siteConfig.url).toString();
+}
+
+function buildDescription(article: Awaited<ReturnType<typeof getNewsArticleBySlugApi>>) {
+    if (!article) return siteConfig.description;
+
+    for (const block of article.content ?? []) {
+        if (block.type === "p" && block.text?.trim()) return block.text.trim().slice(0, 180);
+        if (block.type === "highlight" && block.text?.trim()) return block.text.trim().slice(0, 180);
+    }
+
+    return siteConfig.description;
+}
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+    const { slug } = await params;
+    const article = await getNewsArticleBySlugApi(slug);
+
+    if (!article) {
+        return {
+            title: `Article introuvable | ${siteConfig.name}`,
+            robots: { index: false, follow: false },
+        };
+    }
+
+    const title = `${article.title} | ${siteConfig.name}`;
+    const description = buildDescription(article);
+    const image = toAbsoluteUrl(article.coverImage || article.image || siteConfig.ogImage);
+    const url = new URL(`/actualites/${article.slug}`, siteConfig.url).toString();
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            title,
+            description,
+            url,
+            siteName: siteConfig.name,
+            locale: "fr_FR",
+            type: "article",
+            images: [
+                {
+                    url: image,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [image],
+        },
+    };
+}
 
 export default async function ActualiteDetailPage({
     params,
