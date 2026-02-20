@@ -411,12 +411,16 @@ async function fetchApiLastArticles(): Promise<ApiArticle[]> {
     }
 
     const data = (await res.json()) as unknown;
-    if (data && typeof data === "object" && Array.isArray((data as ApiArticlesResponse).articles)) {
-        return (data as ApiArticlesResponse).articles;
-    }
+    if (data && typeof data === "object") {
+        const articles = (data as ApiArticlesResponse).articles;
+        if (Array.isArray(articles)) {
+            return articles;
+        }
 
-    if (data && typeof data === "object" && Array.isArray((data as ApiArticlesResponse).article)) {
-        return (data as ApiArticlesResponse).article;
+        const article = (data as ApiArticlesResponse).article;
+        if (Array.isArray(article)) {
+            return article;
+        }
     }
 
     return Array.isArray(data) ? (data as ApiArticle[]) : [];
