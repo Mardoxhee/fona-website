@@ -185,9 +185,15 @@ export function Header() {
 
                     {/* CTA Button */}
                     <div className="hidden lg:block">
-                        <Button className="cursor-pointer rounded-md bg-primary-500 px-6 font-heading font-semibold uppercase tracking-wide hover:bg-primary-600">
-                            Devenir Partenaire
-                        </Button>
+                        <a
+                            href="https://front.ecosys.fonasite.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button className="cursor-pointer rounded-md bg-primary-500 px-6 font-heading font-semibold uppercase tracking-wide hover:bg-primary-600">
+                                Devenir Partenaire
+                            </Button>
+                        </a>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -269,9 +275,15 @@ export function Header() {
                             >
                                 Contact
                             </Link>
-                            <Button className="mt-2 w-full cursor-pointer rounded-md bg-primary-500 font-heading font-semibold uppercase tracking-wide">
-                                Devenir Partenaire
-                            </Button>
+                            <a
+                                href="https://front.ecosys.fonasite.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button className="mt-2 w-full cursor-pointer rounded-md bg-primary-500 font-heading font-semibold uppercase tracking-wide">
+                                    Devenir Partenaire
+                                </Button>
+                            </a>
                         </div>
                     </div>
                 )}

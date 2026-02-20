@@ -110,12 +110,14 @@ export function Footer() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link
-                                        href="/partenaires"
+                                    <a
+                                        href="https://front.ecosys.fonasite.app/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className="text-sm text-neutral-400 transition-colors hover:text-primary-400"
                                     >
                                         Devenir partenaire
-                                    </Link>
+                                    </a>
                                 </li>
                                 {navConfig.footerNav.map((item) => (
                                     <li key={item.href}>

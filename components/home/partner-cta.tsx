@@ -20,10 +20,16 @@ export function PartnerCTA() {
                                 étendre notre impact et offrir une réparation digne à chaque victime.
                             </p>
                             <div className="mt-8">
-                                <Button className="cursor-pointer gap-2 rounded-md bg-white px-6 py-3 font-heading font-medium text-secondary-600 hover:bg-neutral-100">
-                                    Devenir partenaire
-                                    <ArrowRight className="h-4 w-4" />
-                                </Button>
+                                <a
+                                    href="https://front.ecosys.fonasite.app/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Button className="cursor-pointer gap-2 rounded-md bg-white px-6 py-3 font-heading font-medium text-secondary-600 hover:bg-neutral-100">
+                                        Devenir partenaire
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Button>
+                                </a>
                             </div>
                         </div>
                     </div>
