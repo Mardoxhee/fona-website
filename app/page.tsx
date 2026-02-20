@@ -5,43 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { HeroSlider } from "@/components/home/hero-slider";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
-import { FeaturedArticle } from "@/components/home/featured-article";
-import { ArticleCard, Article } from "@/components/home/article-card";
 import { InterventionMap } from "@/components/home/intervention-map";
 import { PartnerCTA } from "@/components/home/partner-cta";
 import { NewsletterSection } from "@/components/home/newsletter-section";
-
-const featuredArticle: Article = {
-  id: "1",
-  title: "Le FONAREV renforce les capacités à Kananga pour les écosystèmes œuvrant dans l'accompagnement judiciaire des victimes",
-  slug: "fonarev-renforce-capacites-kananga",
-  image: "/valeur.jpg",
-  date: "20 Mai 2025",
-};
-
-const recentArticles: Article[] = [
-  {
-    id: "2",
-    title: "Le FONAREV reçoit la Rapporteuse spéciale de l'ONU sur les droits des personnes déplacées internes",
-    slug: "fonarev-recoit-rapporteuse-onu",
-    image: "/identification2.jpg",
-    date: "26 Mai 2025",
-  },
-  {
-    id: "3",
-    title: "Lancement du programme d'indemnisation des victimes dans la province du Kasaï",
-    slug: "lancement-programme-indemnisation-kasai",
-    image: "/audience.jpeg",
-    date: "26 Mai 2025",
-  },
-  {
-    id: "4",
-    title: "Le FONAREV participe à la conférence internationale sur les réparations",
-    slug: "fonarev-conference-internationale-reparations",
-    image: "/genocst.jpg",
-    date: "26 Mai 2025",
-  },
-];
+import { HomeLatestNews } from "@/components/home/home-latest-news";
 
 export default function Home() {
   return (
@@ -213,21 +180,7 @@ export default function Home() {
             </div>
           </AnimateOnScroll>
 
-          <div className="mt-10">
-            {/* Featured Article */}
-            <AnimateOnScroll animation="fade-in-up" delay={100}>
-              <FeaturedArticle article={featuredArticle} />
-            </AnimateOnScroll>
-
-            {/* Recent Articles Grid */}
-            <div className="mt-8 grid gap-8 md:grid-cols-3">
-              {recentArticles.map((article, index) => (
-                <AnimateOnScroll key={article.id} animation="fade-in-up" delay={200 + index * 100}>
-                  <ArticleCard article={article} />
-                </AnimateOnScroll>
-              ))}
-            </div>
-          </div>
+          <HomeLatestNews />
         </Container>
       </section>
 

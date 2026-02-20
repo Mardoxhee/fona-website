@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Calendar } from "lucide-react";
 
 export interface Article {
     id: string;
@@ -16,15 +17,22 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
+    const src = (article.image || "/logo-fonarev.jpg").trim();
+    const isLogo = src === "/logo-fonarev.jpg";
+
     return (
         <Link href={`/actualites/${article.slug}`} className="group block">
             <div className="overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
+                <div className={isLogo ? "relative h-48 overflow-hidden bg-primary-600" : "relative h-48 overflow-hidden"}>
                     <Image
-                        src={article.image}
+                        src={src}
                         alt={article.title}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className={
+                            isLogo
+                                ? "object-contain p-10 transition-transform duration-500 group-hover:scale-105"
+                                : "object-cover transition-transform duration-500 group-hover:scale-105"
+                        }
                     />
                 </div>
             </div>
@@ -33,7 +41,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
                     {article.title}
                 </h3>
                 <div className="mt-3 flex items-center justify-between text-sm text-neutral-500">
-                    <span>{article.date}</span>
+                    <span className="inline-flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        {article.date}
+                    </span>
                 </div>
             </div>
         </Link>

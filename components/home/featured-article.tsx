@@ -7,14 +7,23 @@ interface FeaturedArticleProps {
 }
 
 export function FeaturedArticle({ article }: FeaturedArticleProps) {
+    const src = (article.image || "/logo-fonarev.jpg").trim();
+    const isLogo = src === "/logo-fonarev.jpg";
+
     return (
         <Link href={`/actualites/${article.slug}`} className="group relative block overflow-hidden">
-            <div className="relative h-[350px] lg:h-[420px]">
+            <div className={isLogo ? "relative h-[350px] bg-primary-600 lg:h-[420px]" : "relative h-[350px] lg:h-[420px]"}>
                 <Image
-                    src={article.image}
+                    src={src}
                     alt={article.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className={
+                        isLogo
+                            ? "object-contain p-10 transition-transform duration-700 group-hover:scale-105"
+                            : "object-cover transition-transform duration-700 group-hover:scale-105"
+                    }
                 />
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />

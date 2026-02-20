@@ -1,9 +1,11 @@
 import type { NewsItem } from "@/components/home/news-types";
+import { formatDate, slugify } from "@/lib/utils";
 
 export type NewsContentBlock =
     | { type: "p"; text: string }
     | { type: "image"; src: string; alt: string }
-    | { type: "highlight"; text: string };
+    | { type: "highlight"; text: string }
+    | { type: "html"; html: string };
 
 export type NewsArticle = NewsItem & {
     content: NewsContentBlock[];
@@ -267,4 +269,273 @@ export function getGridNews(count = 6): NewsItem[] {
             date: a.date,
             author: a.author,
         }));
+}
+
+type ApiArticle = {
+    status: boolean;
+    isActived: boolean;
+    _id: string;
+    date: string;
+    titre: string;
+    thumbanails?: string;
+    contenu?: string;
+    type?: number;
+    photos?: string[];
+};
+
+type ApiArticlesResponse = {
+    status?: string;
+    article?: ApiArticle[];
+    articles?: ApiArticle[];
+};
+
+function buildArticleSlug(title: string, id: string) {
+    const base = slugify(title || "article");
+    return `${base}--${id}`;
+}
+
+function getArticleIdFromSlug(slug: string) {
+    const parts = slug.split("--");
+    return parts.length > 1 ? parts[parts.length - 1] : slug;
+}
+
+function apiArticleToNewsItem(a: ApiArticle): NewsItem {
+    const thumb = (a.thumbanails ?? "").trim();
+    return {
+        id: a._id,
+        title: a.titre,
+        slug: buildArticleSlug(a.titre, a._id),
+        image: thumb ? thumb : "/logo-fonarev.jpg",
+        date: formatDate(a.date),
+        author: "FONAREV",
+    };
+}
+
+async function getFileLink(file: string): Promise<string | undefined> {
+    const baseUrl = process.env.NEXT_PUBLIC_FILE_URL ?? "https://minio2.fonasite.app";
+    const url = `${baseUrl.replace(/\/$/, "")}/minio/files/site/${encodeURIComponent(file)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) return undefined;
+
+    const payload = (await res.json()) as unknown;
+    if (!payload || typeof payload !== "object") return undefined;
+
+    const p = payload as { src?: unknown; data?: unknown };
+    if (typeof p.src === "string" && p.src.trim()) return p.src;
+    if (typeof p.data === "string" && p.data.trim()) return p.data;
+    if (p.data && typeof p.data === "object") {
+        const d = p.data as { src?: unknown };
+        if (typeof d.src === "string" && d.src.trim()) return d.src;
+    }
+
+    return undefined;
+}
+
+async function resolveApiThumbanails(thumbanails?: string): Promise<string | undefined> {
+    const candidate = (thumbanails ?? "").trim();
+    if (!candidate) return undefined;
+
+    const isValidRemote = /^https?:\/\//i.test(candidate);
+    const isValidLocal = candidate.startsWith("/");
+    if (isValidRemote || isValidLocal) return candidate;
+
+    try {
+        return await getFileLink(candidate);
+    } catch {
+        return undefined;
+    }
+}
+
+function apiArticleToNewsArticle(a: ApiArticle): NewsArticle {
+    const contentText = (a.contenu ?? "").trim();
+    const hasHtmlTags = /<\s*\/?\s*(p|br|div|span|strong|em|ul|ol|li|h1|h2|h3|h4|h5|h6|img)\b/i.test(contentText);
+    const contentBlocks: NewsContentBlock[] = hasHtmlTags
+        ? [{ type: "html", html: contentText.length ? contentText : "<p>Article en cours de rédaction.</p>" }]
+        : (contentText.length
+            ? contentText
+                .split(/\n\s*\n/)
+                .map((p) => p.replace(/\s+/g, " ").trim())
+                .filter(Boolean)
+                .map((text) => ({ type: "p" as const, text }))
+            : [{ type: "p", text: "Article en cours de rédaction." }]);
+
+    const imageCandidate = (a.thumbanails ?? "").trim();
+    const isValidRemote = /^https?:\/\//i.test(imageCandidate);
+    const isValidLocal = imageCandidate.startsWith("/");
+    const safeCover = imageCandidate && (isValidRemote || isValidLocal) ? imageCandidate : undefined;
+
+    return {
+        ...apiArticleToNewsItem(a),
+        coverImage: safeCover,
+        content: contentBlocks,
+    };
+}
+
+async function fetchApiArticles(): Promise<ApiArticle[]> {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseUrl) {
+        throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined");
+    }
+
+    const res = await fetch(`${baseUrl}/articles`, {
+        next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch articles: ${res.status}`);
+    }
+
+    const data = (await res.json()) as ApiArticlesResponse;
+
+    const articles = Array.isArray(data.articles) ? data.articles : Array.isArray(data.article) ? data.article : [];
+    return [...articles].sort((a, b) => {
+        const aTime = Date.parse(a.date ?? "");
+        const bTime = Date.parse(b.date ?? "");
+        return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
+    });
+}
+
+async function fetchApiLastArticles(): Promise<ApiArticle[]> {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseUrl) {
+        throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined");
+    }
+
+    const res = await fetch(`${baseUrl}/articles/last`, {
+        next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch last articles: ${res.status}`);
+    }
+
+    const data = (await res.json()) as unknown;
+    if (data && typeof data === "object" && Array.isArray((data as ApiArticlesResponse).articles)) {
+        return (data as ApiArticlesResponse).articles;
+    }
+
+    if (data && typeof data === "object" && Array.isArray((data as ApiArticlesResponse).article)) {
+        return (data as ApiArticlesResponse).article;
+    }
+
+    return Array.isArray(data) ? (data as ApiArticle[]) : [];
+}
+
+export async function getLastNewsApi(count = 4): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiLastArticles();
+        const picked = apiArticles.filter((a) => a.isActived).slice(0, count);
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getGridNews(count);
+    }
+}
+
+export async function getFeaturedNewsSlidesApi(count = 3): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const picked = apiArticles.filter((a) => a.isActived).slice(0, count);
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getFeaturedNewsSlides(count);
+    }
+}
+
+export async function getRightColumnNewsApi(count = 3): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const picked = apiArticles.filter((a) => a.isActived).slice(count, count * 2).slice(0, count);
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getRightColumnNews(count);
+    }
+}
+
+export async function getGridNewsApi(count = 6): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const picked = apiArticles.filter((a) => a.isActived).slice(0, count);
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getGridNews(count);
+    }
+}
+
+export async function getArchiveNewsApi(count = 6): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const active = apiArticles.filter((a) => a.isActived);
+        const picked = active.slice(Math.max(0, active.length - count));
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getArchiveNews(count);
+    }
+}
+
+export async function getNewsArticleBySlugApi(slug: string): Promise<NewsArticle | undefined> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const id = getArticleIdFromSlug(slug);
+        const found = apiArticles.find((a) => a._id === id);
+
+        if (!found) return undefined;
+
+        const base = apiArticleToNewsArticle(found);
+        const resolved = await resolveApiThumbanails(found.thumbanails);
+        return resolved ? { ...base, coverImage: resolved, image: resolved } : base;
+    } catch {
+        return getNewsArticleBySlug(slug);
+    }
+}
+
+export async function getMoreNewsArticlesApi(currentSlug: string, count = 4): Promise<NewsItem[]> {
+    try {
+        const apiArticles = await fetchApiArticles();
+        const currentId = getArticleIdFromSlug(currentSlug);
+        const picked = apiArticles
+            .filter((a) => a.isActived)
+            .filter((a) => a._id !== currentId)
+            .slice(0, count);
+
+        const baseItems = picked.map(apiArticleToNewsItem);
+        return await Promise.all(
+            baseItems.map(async (item, idx) => {
+                const src = await resolveApiThumbanails(picked[idx]?.thumbanails);
+                return src ? { ...item, image: src } : item;
+            }),
+        );
+    } catch {
+        return getMoreNewsArticles(currentSlug, count);
+    }
 }

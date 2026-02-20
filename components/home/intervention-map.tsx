@@ -144,7 +144,7 @@ export function InterventionMap() {
                     });
                 }
             } catch (error) {
-                console.error("Error loading SVG:", error);
+                console.log("Error loading SVG:", error);
             }
         };
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { Container } from "@/components/ui/container";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { NewsFeaturedSlider } from "@/components/home/news-featured-slider";
@@ -8,17 +6,17 @@ import { NewsGridCard } from "@/components/home/news-grid-card";
 import { NewsArchiveCard } from "@/components/home/news-archive-card";
 import { NewsletterCta } from "@/components/home/newsletter-cta";
 import {
-    getArchiveNews,
-    getFeaturedNewsSlides,
-    getGridNews,
-    getRightColumnNews,
+    getArchiveNewsApi,
+    getFeaturedNewsSlidesApi,
+    getGridNewsApi,
+    getRightColumnNewsApi,
 } from "@/lib/news";
 
-export default function ActualitesPage() {
-    const featuredSlides = getFeaturedNewsSlides(3);
-    const rightColumnItems = getRightColumnNews(3);
-    const fullGridItems = getGridNews(6);
-    const archiveItems = getArchiveNews(6);
+export default async function ActualitesPage() {
+    const featuredSlides = await getFeaturedNewsSlidesApi(3);
+    const rightColumnItems = await getRightColumnNewsApi(3);
+    const fullGridItems = await getGridNewsApi(6);
+    const archiveItems = await getArchiveNewsApi(6);
 
     return (
         <>

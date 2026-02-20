@@ -44,18 +44,16 @@ export default function QuiSommesNousPage() {
                                 </AnimateOnScroll>
                                 <AnimateOnScroll animation="fade-in-up" delay={250}>
                                     <nav className="mt-6 space-y-4 text-sm">
-                                        <AnchorLink href="#qui-sommes-nous" className="block text-neutral-700 hover:text-secondary-500">
+                                        <AnchorLink href="#a-propos-du-fonarev" className="block text-neutral-700 hover:text-secondary-500">
                                             Qui sommes-nous
-                                        </AnchorLink>
-                                        <AnchorLink href="#notre-vision" className="block text-neutral-700 hover:text-secondary-500">
-                                            Notre vision
-                                        </AnchorLink>
-                                        <AnchorLink href="#genocost" className="block text-neutral-700 hover:text-secondary-500">
-                                            Genocost
                                         </AnchorLink>
                                         <AnchorLink href="#nos-missions" className="block text-neutral-700 hover:text-secondary-500">
                                             Nos missions
                                         </AnchorLink>
+                                        <AnchorLink href="#equipe-dirigeante" className="block text-neutral-700 hover:text-secondary-500">
+                                            Équipe dirigeante
+                                        </AnchorLink>
+
                                     </nav>
                                 </AnimateOnScroll>
                             </div>
@@ -98,7 +96,7 @@ export default function QuiSommesNousPage() {
                 </Container>
             </section>
 
-            <section className="bg-white py-16 lg:py-24">
+            <section id="a-propos-du-fonarev" className="scroll-mt-28 bg-white py-16 lg:py-24">
                 <Container>
                     <div className="grid gap-12 lg:grid-cols-2 lg:items-stretch">
                         <AnimateOnScroll animation="fade-in-left" className="h-full">
@@ -122,11 +120,11 @@ export default function QuiSommesNousPage() {
                             </AnimateOnScroll>
                             <AnimateOnScroll animation="fade-in-up" delay={200}>
                                 <h2 className="mt-4 font-heading text-4xl font-bold leading-[1.05] text-neutral-900 sm:text-5xl">
-                                    Leadership, réparation
+                                    Mémoire, reconnaissance
                                     <br />
-                                    et accompagnement pour
+                                    et réparation pour
                                     <br />
-                                    une paix durable.
+                                    une dignité retrouvée.
                                 </h2>
                             </AnimateOnScroll>
 
@@ -274,7 +272,7 @@ export default function QuiSommesNousPage() {
                 </Container>
             </section>
 
-            <section className="bg-primary-500 py-16 lg:py-24">
+            <section id="equipe-dirigeante" className="scroll-mt-28 bg-primary-500 py-16 lg:py-24">
                 <Container>
                     <div className="relative text-center">
                         <AnimateOnScroll animation="fade-in-up">
@@ -306,21 +304,16 @@ export default function QuiSommesNousPage() {
                         <AnimateOnScroll animation="fade-in-up" delay={100}>
                             <div className="overflow-hidden rounded-none bg-white shadow-md">
                                 <div className="relative">
-                                    <div className="relative h-[240px] w-full">
+                                    <div className="relative h-[280px] w-full bg-neutral-100">
                                         <Image
-                                            src="/identification2.jpg"
+                                            src="/pca3.jpg"
                                             alt="Président du Conseil d&apos;Administration"
                                             fill
-                                            className="object-cover"
+                                            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                                            quality={95}
+                                            className="object-cover object-top"
                                         />
                                     </div>
-                                    <button
-                                        type="button"
-                                        className="absolute bottom-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-sm transition-colors hover:bg-secondary-500 hover:text-white"
-                                        aria-label="Voir le profil"
-                                    >
-                                        <Plus className="h-5 w-5" />
-                                    </button>
                                 </div>
                                 <div className="p-6 text-center">
                                     <p className="font-heading text-base font-bold text-neutral-900">Eddy MBANZU DIEKUZEIKO</p>
@@ -332,21 +325,16 @@ export default function QuiSommesNousPage() {
                         <AnimateOnScroll animation="fade-in-up" delay={200}>
                             <div className="overflow-hidden rounded-none bg-white shadow-md">
                                 <div className="relative">
-                                    <div className="relative h-[240px] w-full">
+                                    <div className="relative h-[280px] w-full bg-neutral-100">
                                         <Image
-                                            src="/valeur.jpg"
+                                            src="/dg-fata.jpg"
                                             alt="Directeur Général"
                                             fill
-                                            className="object-cover"
+                                            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                                            quality={95}
+                                            className="object-cover object-top"
                                         />
                                     </div>
-                                    <button
-                                        type="button"
-                                        className="absolute bottom-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-sm transition-colors hover:bg-secondary-500 hover:text-white"
-                                        aria-label="Voir le profil"
-                                    >
-                                        <Plus className="h-5 w-5" />
-                                    </button>
                                 </div>
                                 <div className="p-6 text-center">
                                     <p className="font-heading text-base font-bold text-neutral-900">Patrick FATA MAKUNGA</p>
@@ -358,21 +346,16 @@ export default function QuiSommesNousPage() {
                         <AnimateOnScroll animation="fade-in-up" delay={300}>
                             <div className="overflow-hidden rounded-none bg-white shadow-md">
                                 <div className="relative">
-                                    <div className="relative h-[240px] w-full">
+                                    <div className="relative h-[280px] w-full bg-neutral-100">
                                         <Image
-                                            src="/audience.jpeg"
+                                            src="/dga-admin.jpg"
                                             alt="Directeur Général Adjoint Administration et Finance"
                                             fill
-                                            className="object-cover"
+                                            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                                            quality={95}
+                                            className="object-cover object-top"
                                         />
                                     </div>
-                                    <button
-                                        type="button"
-                                        className="absolute bottom-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-sm transition-colors hover:bg-secondary-500 hover:text-white"
-                                        aria-label="Voir le profil"
-                                    >
-                                        <Plus className="h-5 w-5" />
-                                    </button>
                                 </div>
                                 <div className="p-6 text-center">
                                     <p className="font-heading text-base font-bold text-neutral-900">Kevin NGUNGA MAKIEDI</p>
@@ -384,21 +367,16 @@ export default function QuiSommesNousPage() {
                         <AnimateOnScroll animation="fade-in-up" delay={400}>
                             <div className="overflow-hidden rounded-none bg-white shadow-md">
                                 <div className="relative">
-                                    <div className="relative h-[240px] w-full">
+                                    <div className="relative h-[280px] w-full bg-neutral-100">
                                         <Image
-                                            src="/genocst.jpg"
+                                            src="/dga-emma-2.jpg"
                                             alt="Directeur Général Adjoint Opérations"
                                             fill
-                                            className="object-cover"
+                                            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                                            quality={95}
+                                            className="object-cover object-top"
                                         />
                                     </div>
-                                    <button
-                                        type="button"
-                                        className="absolute bottom-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-sm transition-colors hover:bg-secondary-500 hover:text-white"
-                                        aria-label="Voir le profil"
-                                    >
-                                        <Plus className="h-5 w-5" />
-                                    </button>
                                 </div>
                                 <div className="p-6 text-center">
                                     <p className="font-heading text-base font-bold text-neutral-900">Emmanuella ZANDI MUDERHUWA</p>
@@ -408,7 +386,7 @@ export default function QuiSommesNousPage() {
                         </AnimateOnScroll>
                     </div>
 
-    
+
                 </Container>
             </section>
         </>

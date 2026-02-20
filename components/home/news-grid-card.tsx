@@ -8,17 +8,24 @@ type NewsGridCardProps = {
 };
 
 export function NewsGridCard({ item, className }: NewsGridCardProps) {
+    const src = (item.image || "/logo-fonarev.jpg").trim();
+    const isLogo = src === "/logo-fonarev.jpg";
+
     return (
         <Link
             href={`/actualites/${item.slug}`}
             className={className ?? "group block border border-neutral-200 bg-white transition-colors hover:border-neutral-300"}
         >
-            <div className="relative h-40 overflow-hidden bg-neutral-100">
+            <div className={isLogo ? "relative h-40 overflow-hidden bg-primary-600" : "relative h-40 overflow-hidden bg-neutral-100"}>
                 <Image
-                    src={item.image}
+                    src={src}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className={
+                        isLogo
+                            ? "object-contain p-8 transition-transform duration-500 group-hover:scale-[1.03]"
+                            : "object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    }
                 />
             </div>
             <div className="p-5">

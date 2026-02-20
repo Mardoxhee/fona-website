@@ -102,9 +102,9 @@ export function Header() {
                         <Image
                             src="/logo-fonarev.jpg"
                             alt="FONAREV"
-                            width={150}
-                            height={50}
-                            className="h-12 w-auto"
+                            width={180}
+                            height={56}
+                            className="h-14 w-auto"
                             priority
                         />
                     </Link>

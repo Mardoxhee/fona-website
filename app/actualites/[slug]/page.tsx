@@ -4,7 +4,7 @@ import { NewsArticleHeader } from "@/components/home/news-article-header";
 import { NewsArticleDetail } from "@/components/home/news-article-detail";
 import { NewsletterCta } from "@/components/home/newsletter-cta";
 import { NewsGridCard } from "@/components/home/news-grid-card";
-import { getMoreNewsArticles, getNewsArticleBySlug } from "@/lib/news";
+import { getMoreNewsArticlesApi, getNewsArticleBySlugApi } from "@/lib/news";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -16,13 +16,13 @@ export default async function ActualiteDetailPage({
 }) {
     const { slug } = await params;
 
-    const article = getNewsArticleBySlug(slug);
+    const article = await getNewsArticleBySlugApi(slug);
 
     if (!article) {
         notFound();
     }
 
-    const moreNews = getMoreNewsArticles(slug, 4);
+    const moreNews = await getMoreNewsArticlesApi(slug, 4);
 
     return (
         <>
